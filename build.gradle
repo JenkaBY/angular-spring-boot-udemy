@@ -1,0 +1,9 @@
+plugins {
+    id 'idea'
+    id 'base'
+}
+
+allprojects {
+    apply plugin: 'idea'
+    apply plugin: 'base'
+}

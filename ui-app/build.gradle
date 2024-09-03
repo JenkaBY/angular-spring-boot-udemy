@@ -1,0 +1,79 @@
+plugins {
+    id 'com.github.node-gradle.node' version '7.0.2'
+}
+
+ext {
+    angulaCliVersion = '14.0.7'
+}
+
+clean {
+  delete "${project.projectDir}/dist"
+  delete "${project.projectDir}/build"
+}
+
+node {
+    // Version of node to use.
+    version = '16.20.2'
+
+    // Version of npm to use. An Empty means a default provided by node.js installation
+    //    npmVersion = ''
+
+    // If true, it will download node using above parameters.
+    // If false, it will try to use globally installed node.
+    download = true
+
+    // Set the work directory for unpacking node
+    workDir = file("${rootDir}/.gradle/nodejs")
+
+    // Set the work directory for NPM
+    npmWorkDir = file("${rootDir}/.gradle/npm")
+}
+
+tasks.register('generateAngularApp', NpxTask) {
+    command = "@angular/cli@${angulaCliVersion}"
+    args = ['new', 'ui-app', '--directory', '.', '--skip-git']
+}
+
+tasks.register('helpAngularApp', NpxTask) {
+    command = "@angular/cli@${angulaCliVersion}"
+    args = ['new', 'help']
+}
+
+tasks.register('ngServe', NpxTask) {
+    dependsOn npmInstall
+    command = 'ng'
+    args = ['serve', '--open']
+}
+
+tasks.register('buildAngularApp', NpxTask) {
+    dependsOn npmInstall
+    command = 'ng'
+    args = ['build', '--dev']
+    inputs.files(
+            'package.json',
+            'package-lock.json',
+            'angular.json',
+            'tsconfig.json',
+            'tsconfig.app.json')
+    inputs.dir('src')
+    inputs.dir(fileTree("node_modules").exclude(".cache"))
+    outputs.dir('dist')
+}
+
+tasks.register('installDevPackage', NpmTask) {
+    args = ['install', 'tslint-angular', '--save-dev']
+}
+
+tasks.register('auditForceFix', NpmTask) {
+    // install the express package only
+    args = ['audit', 'fix', '--force']
+}
+
+// gradle ngRun -Pcom="any_command_you_want_to_run"
+tasks.register('ngRun', NpxTask) {
+  if (!project.hasProperty('com')) {
+    throw new GradleException("Missing mandatory argument: 'com'. Example: gradle ngRun -Pcom=\"generate component xyz\"")
+  }
+  command = 'ng'
+  args =  com.split(' ').collect { i -> "${i}"}
+}
