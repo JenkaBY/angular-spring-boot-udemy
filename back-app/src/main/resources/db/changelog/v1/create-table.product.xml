@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet author="the.1st.developer" id="create-table--product">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="product"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="product">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+            <column name="sku" type="VARCHAR"/>
+            <column name="name" type="VARCHAR"/>
+            <column name="description" type="VARCHAR"/>
+            <column name="unit_price" type="decimal(13,2)"/>
+            <column name="image_url" type="varchar"/>
+            <column name="active" type="boolean"/>
+            <column name="units_in_stock" type="int"/>
+            <column name="date_created" type="timestamp with time zone"/>
+            <column name="last_updated" type="timestamp with time zone"/>
+            <column name="category_id" type="bigint">
+                <constraints uniqueConstraintName="fk_category" foreignKeyName="fk_product_category" referencedTableName="product_category" referencedColumnNames="id"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

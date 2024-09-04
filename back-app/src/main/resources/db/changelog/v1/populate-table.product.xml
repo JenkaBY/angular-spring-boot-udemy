@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet author="the.1st.developer" id="populate-table--product_category">
+
+        <preConditions onErrorMessage="Failed Pre Conditions for table" onFail="HALT">
+            <and>
+                <tableExists tableName="product"/>
+                <sqlCheck expectedResult="1">SELECT COUNT(*) product</sqlCheck>
+            </and>
+        </preConditions>
+
+        <sqlFile path="./resource/initial_product.sql" relativeToChangelogFile="true"/>
+
+    </changeSet>
+
+</databaseChangeLog>
