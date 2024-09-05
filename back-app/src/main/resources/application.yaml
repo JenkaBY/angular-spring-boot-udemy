@@ -13,3 +13,6 @@ spring:
     hibernate:
       ddl-auto: validate
     open-in-view: false
+  data:
+    rest:
+      base-path: /api
