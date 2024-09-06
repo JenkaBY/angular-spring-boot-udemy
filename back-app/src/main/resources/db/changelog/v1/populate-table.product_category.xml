@@ -13,7 +13,7 @@
             </and>
         </preConditions>
 
-        <sqlFile path="./resource/initial_product_category.sql" relativeToChangelogFile="true"/>
+        <sqlFile path="./resource/product_category_v2.sql" relativeToChangelogFile="true"/>
 
     </changeSet>
 
