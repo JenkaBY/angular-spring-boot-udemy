@@ -16,9 +16,13 @@ export class ProductService {
   public getProducts(categoryId: number): Observable<Product[]> {
     const params = new HttpParams()
       .set("categoryId", categoryId)
-      .append("size", 2)
+      .append("size", 8)
       .append('page', 0);
     const url = `${environment.apiUrls.products}products/search/findByCategoryId`;
+    return this._searchProducts(url, params);
+  }
+
+  private _searchProducts(url: string, params: HttpParams) {
     return this.http.get<GetProducts>(url,
       {
         params: params,
@@ -36,6 +40,13 @@ export class ProductService {
     return this.http.get<GetProductCategories>(url).pipe(
       map(response => response._embedded.productCategory)
     );
+  }
+
+  public search(keyword: string): Observable<Product[]> {
+    const url = `${environment.apiUrls.products}products/search/findByNameContainingIgnoreCase`;
+    const params = new HttpParams()
+      .set("name", keyword);
+    return this._searchProducts(url, params);
   }
 }
 
