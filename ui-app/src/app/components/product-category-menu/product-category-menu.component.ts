@@ -8,6 +8,7 @@ import {ProductService} from "../../service/product.service";
   styleUrls: ['./product-category-menu.component.css']
 })
 export class ProductCategoryMenuComponent implements OnInit {
+
   productCategories: ProductCategory[] = []
 
   constructor(private productService: ProductService) {

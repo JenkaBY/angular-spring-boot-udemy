@@ -48,6 +48,11 @@ export class ProductService {
       .set("name", keyword);
     return this._searchProducts(url, params);
   }
+
+  public getProduct(id: number): Observable<Product> {
+    const url = `${environment.apiUrls.products}products/${id}`;
+    return this.http.get<Product>(url);
+  }
 }
 
 
