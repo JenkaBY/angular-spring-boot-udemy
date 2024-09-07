@@ -26,5 +26,7 @@ public class RestDataConfig implements RepositoryRestConfigurer {
                 .withItemExposure(((metadata, httpMethods) -> httpMethods.disable(unsupportedActions)))
                 .withCollectionExposure(((metadata, httpMethods) -> httpMethods.disable(unsupportedActions)));
 
+        //        exposeIds
+        config.exposeIdsFor(Product.class, ProductCategory.class);
     }
 }

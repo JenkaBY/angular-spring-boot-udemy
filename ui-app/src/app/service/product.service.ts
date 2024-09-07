@@ -3,6 +3,7 @@ import {HttpClient, HttpParams} from "@angular/common/http";
 import {map, Observable} from "rxjs";
 import {Product} from "../common/product";
 import {environment} from "../../environments/environment";
+import {ProductCategory} from "../common/product-category";
 
 @Injectable({
   providedIn: 'root'
@@ -28,11 +29,25 @@ export class ProductService {
         })
       );
   }
+
+  public getProductCategories(): Observable<ProductCategory[]> {
+    const url = `${environment.apiUrls.products}product-category`;
+
+    return this.http.get<GetProductCategories>(url).pipe(
+      map(response => response._embedded.productCategory)
+    );
+  }
 }
 
 
 export interface GetProducts {
   _embedded: {
     products: Product[];
+  };
+}
+
+export interface GetProductCategories {
+  _embedded: {
+    productCategory: ProductCategory[];
   };
 }
