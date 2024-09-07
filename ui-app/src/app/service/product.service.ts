@@ -13,25 +13,24 @@ export class ProductService {
   constructor(private http: HttpClient) {
   }
 
-  public getProducts(categoryId: number): Observable<Product[]> {
-    const params = new HttpParams()
-      .set("categoryId", categoryId)
-      .append("size", 8)
-      .append('page', 0);
+  public getProducts(categoryId: number, page: number, pageSize: number): Observable<GetProducts> {
+    let params = new HttpParams()
+      .set("categoryId", categoryId);
+    if (pageSize) {
+      params = params.append("size", pageSize)
+    }
+    if (page) {
+      params = params.append('page', page);
+    }
     const url = `${environment.apiUrls.products}products/search/findByCategoryId`;
     return this._searchProducts(url, params);
   }
 
-  private _searchProducts(url: string, params: HttpParams) {
+  private _searchProducts(url: string, params: HttpParams): Observable<GetProducts> {
     return this.http.get<GetProducts>(url,
       {
         params: params,
-      })
-      .pipe(
-        map((response: GetProducts) => {
-          return response._embedded.products
-        })
-      );
+      });
   }
 
   public getProductCategories(): Observable<ProductCategory[]> {
@@ -42,10 +41,17 @@ export class ProductService {
     );
   }
 
-  public search(keyword: string): Observable<Product[]> {
+  public search(keyword: string, page?: number, pageSize?: number): Observable<GetProducts> {
     const url = `${environment.apiUrls.products}products/search/findByNameContainingIgnoreCase`;
-    const params = new HttpParams()
+    let params = new HttpParams()
       .set("name", keyword);
+    if (pageSize) {
+      params = params.append("size", pageSize)
+    }
+    if (page) {
+      params = params.append('page', page);
+    }
+
     return this._searchProducts(url, params);
   }
 
@@ -59,7 +65,13 @@ export class ProductService {
 export interface GetProducts {
   _embedded: {
     products: Product[];
-  };
+  },
+  page: {
+    size: number,
+    totalElements: number,
+    totalPages: number,
+    number: number,
+  }
 }
 
 export interface GetProductCategories {

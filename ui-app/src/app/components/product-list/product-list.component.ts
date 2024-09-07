@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ProductService} from "../../service/product.service";
+import {GetProducts, ProductService} from "../../service/product.service";
 import {Product} from "../../common/product";
 import {ActivatedRoute} from "@angular/router";
 
@@ -12,7 +12,14 @@ export class ProductListComponent implements OnInit {
 
   products: Product[] = [];
   currentCategoryId: number = 1;
+  previousCategoryId: number = 1;
+  //  keyword
   searchMode: boolean = false;
+  prevKeyword: string = "";
+  //  pagination
+  pageNumber: number = 1;
+  pageSize: number = 2;
+  totalElements: number = 0;
 
   constructor(private productService: ProductService,
               private route: ActivatedRoute,) {
@@ -38,14 +45,37 @@ export class ProductListComponent implements OnInit {
     if (hasCategoryId) {
       this.currentCategoryId = +this.route.snapshot.paramMap.get('id')!;
     }
-    this.productService.getProducts(this.currentCategoryId)
-      .subscribe(data => this.products = data)
+    if (this.previousCategoryId != this.currentCategoryId) {
+      this.pageNumber = 1;
+    }
+    this.previousCategoryId = this.currentCategoryId;
+
+    console.log(`currentCat ${this.currentCategoryId} prevCat ${this.previousCategoryId} page ${this.pageNumber} size ${this.pageSize}`);
+
+    this.productService.getProducts(this.currentCategoryId, this.pageNumber - 1, this.pageSize)
+      .subscribe((data) => this.subscribeProductsList(data));
   }
 
   private handleSearchProducts() {
-    const keyword = this.route.snapshot.paramMap.get('keyword')!
+    const currentKeyword = this.route.snapshot.paramMap.get('keyword')!
+    if (this.prevKeyword != currentKeyword) {
+      this.pageNumber = 1;
+    }
+    this.prevKeyword = currentKeyword;
+    this.productService.search(currentKeyword, this.pageNumber - 1, this.pageSize)
+      .subscribe((data) => this.subscribeProductsList(data));
+  }
 
-    this.productService.search(keyword)
-      .subscribe(data => this.products = data);
+  private subscribeProductsList(data: GetProducts) {
+    this.products = data._embedded.products;
+    this.pageNumber = data.page.number + 1;
+    this.pageSize = data.page.size;
+    this.totalElements = data.page.totalElements;
+  }
+
+  updatePageSize(newPageSize: string) {
+    this.pageSize = +newPageSize;
+    this.pageNumber = 1;
+    this.getProductList();
   }
 }

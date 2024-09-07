@@ -9,6 +9,7 @@ import {ProductListComponent} from './components/product-list/product-list.compo
 import {SearchComponent} from './components/search/search.component';
 import {ProductDetailsComponent} from './components/product-details/product-details.component';
 import {ProductCategoryMenuComponent} from "./components/product-category-menu/product-category-menu.component";
+import {NgbPaginationModule} from "@ng-bootstrap/ng-bootstrap";
 
 const routes: Routes = [
   {path: 'category/:id', component: ProductListComponent},
@@ -31,7 +32,8 @@ const routes: Routes = [
   imports: [
     BrowserModule,
     RouterModule.forRoot(routes),
-    HttpClientModule
+    HttpClientModule,
+    NgbPaginationModule
   ],
   providers: [ProductService],
   bootstrap: [AppComponent]
