@@ -53,9 +53,6 @@ export class ProductListComponent implements OnInit {
       this.pageNumber = 1;
     }
     this.previousCategoryId = this.currentCategoryId;
-
-    console.log(`currentCat ${this.currentCategoryId} prevCat ${this.previousCategoryId} page ${this.pageNumber} size ${this.pageSize}`);
-
     this.productService.getProducts(this.currentCategoryId, this.pageNumber - 1, this.pageSize)
       .subscribe((data) => this.subscribeProductsList(data));
   }
@@ -84,7 +81,6 @@ export class ProductListComponent implements OnInit {
   }
 
   addToCart(product: Product) {
-    console.log("Product added to cart " + JSON.stringify(product))
     this.cartService.addToCart(new CartItem(product))
   }
 }

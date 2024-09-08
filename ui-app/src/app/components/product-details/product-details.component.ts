@@ -20,7 +20,6 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log("Initit");
     this.getProduct()
   }
 
