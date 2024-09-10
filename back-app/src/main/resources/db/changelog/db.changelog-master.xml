@@ -8,4 +8,9 @@
     <include relativeToChangelogFile="true" file="v1/create-table.product.xml"/>
     <include relativeToChangelogFile="true" file="v1/populate-table.product_category.xml"/>
     <include relativeToChangelogFile="true" file="v1/populate-table.product.xml"/>
+    <!--    release 2.0 -->
+    <include relativeToChangelogFile="true" file="v1/create-table.country.xml"/>
+    <include relativeToChangelogFile="true" file="v1/create-table.state.xml"/>
+    <include relativeToChangelogFile="true" file="v1/populate-table.country.xml"/>
+    <include relativeToChangelogFile="true" file="v1/populate-table.state.xml"/>
 </databaseChangeLog>

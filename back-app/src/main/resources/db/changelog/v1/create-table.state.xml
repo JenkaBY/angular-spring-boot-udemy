@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet author="the.1st.developer" id="create-table--state">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="state"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="state">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+            <column name="name" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="country_id" type="bigint">
+                <constraints uniqueConstraintName="fk_country" foreignKeyName="fk_state_country"
+                             referencedTableName="country" referencedColumnNames="id"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
