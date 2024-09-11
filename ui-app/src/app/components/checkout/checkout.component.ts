@@ -4,6 +4,7 @@ import {CheckoutFormService} from "../../service/checkout-form.service";
 import {Country} from "../../common/country";
 import {State} from "../../common/state";
 import {CustomFormValidators} from "../../validators/custom-form-validators";
+import {CartService} from "../../service/cart.service";
 
 @Component({
   selector: 'app-checkout',
@@ -21,7 +22,8 @@ export class CheckoutComponent implements OnInit {
   billingStates: State[] = [];
 
   constructor(private formBuilder: FormBuilder,
-              private checkoutFormService: CheckoutFormService) {
+              private checkoutFormService: CheckoutFormService,
+              private cartService: CartService,) {
 
   }
 
@@ -72,6 +74,8 @@ export class CheckoutComponent implements OnInit {
     this.checkoutFormService.getCountries().subscribe(
       data => this.countries = data
     )
+
+    this.reviewCartDetails();
   }
 
   onSubmit() {
@@ -201,4 +205,11 @@ export class CheckoutComponent implements OnInit {
     return this.checkoutFormGroup?.get('creditCard.expirationYear')!
   }
 
+  private reviewCartDetails() {
+    this.cartService.totalQuantity.subscribe(data => {
+      this.totalQuantity = data
+    })
+
+    this.cartService.totalPrice.subscribe(data => { this.totalPrice = data })
+  }
 }
