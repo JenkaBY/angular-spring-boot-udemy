@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet author="the.1st.developer" id="create-table--address">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="address"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="address">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+            <column name="city" type="VARCHAR"/>
+            <column name="country" type="VARCHAR"/>
+            <column name="state" type="VARCHAR"/>
+            <column name="street" type="VARCHAR"/>
+            <column name="zip_code" type="VARCHAR"/>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet author="the.1st.developer" id="create-table--customer">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="customer"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="customer">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+            <column name="first_name" type="VARCHAR"/>
+            <column name="last_name" type="VARCHAR"/>
+            <column name="email" type="VARCHAR"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="the.1st.developer" id="create-table--orders">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="orders"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="orders">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+            <column name="order_tracking_number" type="VARCHAR"/>
+            <column name="total_price" type="decimal(19,2)"/>
+            <column name="total_quantity" type="int"/>
+            <column name="billing_address_id" type="BIGINT">
+                <constraints unique="true"
+                             uniqueConstraintName="uk_billing_address_id"
+                             foreignKeyName="fk_billing_address_id"
+                             referencedTableName="address"
+                             referencedColumnNames="id"
+                />
+            </column>
+            <column name="shipping_address_id" type="BIGINT">
+                <constraints unique="true"
+                             uniqueConstraintName="uk_shipping_address_id"
+                             foreignKeyName="fk_shipping_address_id"
+                             referencedTableName="address"
+                             referencedColumnNames="id"
+                />
+            </column>
+            <column name="customer_id" type="BIGINT">
+                <constraints foreignKeyName="fk_customer_id"
+                             referencedTableName="customer"
+                             referencedColumnNames="id"
+                />
+            </column>
+            <column name="status" type="VARCHAR(128)"/>
+            <column name="date_created" type="timestamp with time zone"/>
+            <column name="last_updated" type="timestamp with time zone"/>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet author="the.1st.developer" id="create-table--order_item">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="order_item"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="order_item">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+            <column name="image_url" type="VARCHAR"/>
+            <column name="unit_price" type="decimal(19,2)"/>
+            <column name="quantity" type="int"/>
+            <column name="order_id" type="BIGINT">
+                <constraints foreignKeyName="fk_order_id"
+                             referencedTableName="orders"
+                             referencedColumnNames="id"/>
+            </column>
+            <column name="product_id" type="BIGINT">
+                <constraints foreignKeyName="fk_product_id"
+                             referencedTableName="product"
+                             referencedColumnNames="id"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

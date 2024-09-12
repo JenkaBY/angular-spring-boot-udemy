@@ -13,4 +13,5 @@
     <include relativeToChangelogFile="true" file="v1/create-table.state.xml"/>
     <include relativeToChangelogFile="true" file="v1/populate-table.country.xml"/>
     <include relativeToChangelogFile="true" file="v1/populate-table.state.xml"/>
+    <include relativeToChangelogFile="true" file="v1/create-table.order-tables.xml"/>
 </databaseChangeLog>
