@@ -55,4 +55,10 @@ export class CartService {
     this.totalPrice.next(cartTotalPrice);
     this.totalQuantity.next(cartTotalQuantity);
   }
+
+  resetCart() {
+    this.cartItems = [];
+    this.totalQuantity.next(0)
+    this.totalPrice.next(0.0)
+  }
 }

@@ -5,6 +5,13 @@ import {Country} from "../../common/country";
 import {State} from "../../common/state";
 import {CustomFormValidators} from "../../validators/custom-form-validators";
 import {CartService} from "../../service/cart.service";
+import {CheckoutService} from "../../service/checkout.service";
+import {Router} from "@angular/router";
+import {Order} from "../../common/order";
+import {OrderItem} from "../../common/order-item";
+import {Address} from "../../common/address";
+import {Customer} from "../../common/customer";
+import {Purchase} from "../../common/purchase";
 
 @Component({
   selector: 'app-checkout',
@@ -23,7 +30,9 @@ export class CheckoutComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private checkoutFormService: CheckoutFormService,
-              private cartService: CartService,) {
+              private cartService: CartService,
+              private checkoutService: CheckoutService,
+              private route: Router,) {
 
   }
 
@@ -82,7 +91,9 @@ export class CheckoutComponent implements OnInit {
     console.log(this.checkoutFormGroup!.get('customer')?.value)
     if (this.checkoutFormGroup!.invalid) {
       this.checkoutFormGroup?.markAllAsTouched();
+      return;
     }
+    this.placeOrder();
   }
 
   copyShippingAddressToBillingAddress(event: any) {
@@ -210,6 +221,47 @@ export class CheckoutComponent implements OnInit {
       this.totalQuantity = data
     })
 
-    this.cartService.totalPrice.subscribe(data => { this.totalPrice = data })
+    this.cartService.totalPrice.subscribe(data => {
+      this.totalPrice = data
+    })
+  }
+
+  private placeOrder() {
+    const order = new Order(this.totalQuantity, this.totalPrice);
+    const orderItems: OrderItem[] = this.cartService.cartItems.map(item => new OrderItem(item));
+    const shippingAddress = this.extractAddress('shippingAddress');
+    const billingAddress = this.extractAddress('billingAddress');
+    const customer: Customer = this.checkoutFormGroup?.controls['customer'].value;
+
+    const purchase = new Purchase(
+      customer, shippingAddress, billingAddress, order, orderItems,
+    )
+    console.log(`purchase: ${JSON.stringify(purchase)}`)
+
+    this.checkoutService.placeOrder(purchase).subscribe({
+      next: data => {
+        alert(`Your order has been received. Order trackingNumber ${data.orderTrackingNumber}`)
+
+        this.resetCart();
+      },
+      error: response => alert(`There was an error: ${response.message}`),
+    });
+  }
+
+
+  private extractAddress(formGroupName: string): Address {
+    const address: Address = this.checkoutFormGroup?.controls[formGroupName].value as Address;
+    const state: State = JSON.parse(JSON.stringify(address.state));
+    const country: Country = JSON.parse(JSON.stringify(address.country));
+    address.state = state.name
+    address.country = country.name
+    return address;
+  }
+
+  private resetCart() {
+    this.checkoutFormGroup?.reset();
+    this.cartService.resetCart();
+
+    this.route.navigate(['/products'])
   }
 }
