@@ -1,7 +1,7 @@
 import {Injector, NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {AppComponent} from './app.component';
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {NgbPaginationModule} from "@ng-bootstrap/ng-bootstrap";
 import {ReactiveFormsModule} from "@angular/forms";
 import {OKTA_CONFIG, OktaAuthGuard, OktaAuthModule, OktaCallbackComponent} from "@okta/okta-angular";
@@ -21,6 +21,7 @@ import {LoginStatusComponent} from './components/login-status/login-status.compo
 import appConfig from "./components/config/app-config";
 import {MembersPageComponent} from './components/members-page/members-page.component';
 import {OrderHistoryComponent} from './components/order-history/order-history.component';
+import {AuthInterceptorService} from "./service/auth-interceptor.service";
 
 const oktaConfig = appConfig.oidc;
 const oktaAuth = new OktaAuth(oktaConfig);
@@ -83,6 +84,7 @@ const routes: Routes = [
   providers: [
     ProductService,
     {provide: OKTA_CONFIG, useValue: {oktaAuth}},
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true},
   ],
   bootstrap: [AppComponent]
 })

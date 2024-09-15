@@ -23,9 +23,12 @@ spring:
 #    org.hibernate.SQL: DEBUG
 #    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 #    org.hibernate.type: trace
-
 management:
   endpoints:
     web:
       cors:
         allowed-origins: http://localhost:4200
+okta:
+  oauth2:
+    client-id: 0oajmmvh3wtt7XMDR5d7
+    issuer: https://dev-52838579.okta.com/oauth2/default
