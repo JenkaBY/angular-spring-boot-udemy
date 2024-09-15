@@ -14,4 +14,5 @@
     <include relativeToChangelogFile="true" file="v1/populate-table.country.xml"/>
     <include relativeToChangelogFile="true" file="v1/populate-table.state.xml"/>
     <include relativeToChangelogFile="true" file="v1/create-table.order-tables.xml"/>
+    <include file="/db/changelog/v1/modify-table.customer.add-unique-email-constraint.xml"/>
 </databaseChangeLog>

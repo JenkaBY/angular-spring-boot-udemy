@@ -16,9 +16,16 @@ spring:
   data:
     rest:
       base-path: /api
+      detection-strategy: annotated
 
 #logging:
 #  level:
 #    org.hibernate.SQL: DEBUG
 #    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 #    org.hibernate.type: trace
+
+management:
+  endpoints:
+    web:
+      cors:
+        allowed-origins: http://localhost:4200

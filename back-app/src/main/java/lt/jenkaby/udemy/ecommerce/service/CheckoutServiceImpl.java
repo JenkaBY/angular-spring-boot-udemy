@@ -10,6 +10,7 @@ import lt.jenkaby.udemy.ecommerce.entity.OrderItem;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -35,7 +36,10 @@ public class CheckoutServiceImpl implements CheckoutService {
         order.setBillingAddress(purchase.getBillingAddress());
         order.setShippingAddress(purchase.getShippingAddress());
 
-        Customer customer = purchase.getCustomer();
+        Customer customer = Optional.of(purchase.getCustomer())
+                .flatMap(req -> customerRepository.findByEmail(req.getEmail()))
+                .orElse(purchase.getCustomer());
+
         customer.add(order);
 
         customerRepository.save(customer);
