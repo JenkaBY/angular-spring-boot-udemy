@@ -11,7 +11,11 @@ export class CartService {
   totalPrice: Subject<number> = new BehaviorSubject<number>(0.0);
   totalQuantity: Subject<number> = new BehaviorSubject<number>(0);
 
+  storage: Storage = localStorage;
+
   constructor() {
+    this.cartItems =  JSON.parse(this.storage.getItem("cartItems") || '[]') as CartItem[];
+    this.computeCartTotal();
   }
 
   addToCart(item: CartItem) {
@@ -54,11 +58,17 @@ export class CartService {
 
     this.totalPrice.next(cartTotalPrice);
     this.totalQuantity.next(cartTotalQuantity);
+    this.persistCartItems();
   }
 
   resetCart() {
     this.cartItems = [];
     this.totalQuantity.next(0)
     this.totalPrice.next(0.0)
+    this.persistCartItems()
+  }
+
+  persistCartItems() {
+    this.storage.setItem("cartItems", JSON.stringify(this.cartItems));
   }
 }
