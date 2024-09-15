@@ -8,8 +8,11 @@ import {OktaAuth} from "@okta/okta-auth-js";
   styleUrls: ['./login-status.component.css']
 })
 export class LoginStatusComponent implements OnInit {
+
   isAuthenticated: boolean = false;
   userFullName: string = '';
+  storage: Storage = sessionStorage;
+
   constructor(private oktaAuthService: OktaAuthStateService,
               @Inject(OKTA_AUTH) private  oktaOAuth: OktaAuth) { }
 
@@ -22,7 +25,11 @@ export class LoginStatusComponent implements OnInit {
 
   private getUserDetails() {
     if (this.isAuthenticated) {
-      this.oktaOAuth.getUser().then((res) => this.userFullName = res.name as string)
+      this.oktaOAuth.getUser().then((res) => {
+        this.userFullName = res.name as string;
+        const email = res.email as string;
+        this.storage.setItem('userEmail', JSON.stringify(email))
+      })
     }
   }
 

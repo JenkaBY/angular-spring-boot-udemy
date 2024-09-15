@@ -1,9 +1,6 @@
 package lt.jenkaby.udemy.ecommerce.config;
 
-import lt.jenkaby.udemy.ecommerce.entity.Country;
-import lt.jenkaby.udemy.ecommerce.entity.Product;
-import lt.jenkaby.udemy.ecommerce.entity.ProductCategory;
-import lt.jenkaby.udemy.ecommerce.entity.State;
+import lt.jenkaby.udemy.ecommerce.entity.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
@@ -18,7 +15,7 @@ import java.util.List;
 public class RestDataConfig implements RepositoryRestConfigurer {
 
     private final static List<Class<?>> READ_ONLY_ENTITIES = List.of(
-            Product.class, ProductCategory.class, Country.class, State.class
+            Product.class, ProductCategory.class, Country.class, State.class, Order.class
     );
     private static final HttpMethod[] UNSUPPORTED_METHODS = {HttpMethod.PUT, HttpMethod.DELETE, HttpMethod.POST, HttpMethod.PATCH};
     @Value("${management.endpoints.web.cors.allowed-origins}")
