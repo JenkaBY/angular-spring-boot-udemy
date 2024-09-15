@@ -10,7 +10,7 @@
   background: #205b8d
 }
 
-.login-header {
+.login-status-header {
   display: -webkit-box;
   display: -webkit-flex;
   display: -moz-box;
@@ -30,4 +30,9 @@
   -moz-transition: all .5s ease;
   transition: all .5s ease
 }
+
+.ml-1 {
+  margin-left: 1px;
+}
+
 
