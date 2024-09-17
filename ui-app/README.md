@@ -1,4 +1,4 @@
-to generate public key and certificate
+To generate public key and certificate
 1. Create a config file - localhost.cof
 2. run the following command 
 ```bash
