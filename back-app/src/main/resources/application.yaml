@@ -1,3 +1,11 @@
+server:
+  port: 8443
+  ssl:
+    enabled: true
+    key-alias: luv2code
+    key-store: classpath:luv2code-keystore.p12
+    key-store-password: ${KEY_STORE_PASS:secret}
+    key-store-type: PKCS12
 spring:
   application:
     name: e-commerce
