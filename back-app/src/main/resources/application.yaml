@@ -27,7 +27,7 @@ management:
   endpoints:
     web:
       cors:
-        allowed-origins: http://localhost:4200
+        allowed-origins: https://localhost:4200
 okta:
   oauth2:
     client-id: 0oajmmvh3wtt7XMDR5d7
